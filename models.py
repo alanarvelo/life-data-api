@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 ############################  BOOKS  ###########################
 class Book(db.Model):
   __tablename__ = 'books'
-  isbn = db.Column(db.Integer, primary_key=True, autoincrement=False)
+  isbn = db.Column(db.String(50), primary_key=True, autoincrement=False)
   title = db.Column(db.String(500), nullable=False)
   author = db.Column(db.String(200), nullable=False)
   year_published = db.Column(db.DATE, nullable=False)
