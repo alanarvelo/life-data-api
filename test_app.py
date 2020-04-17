@@ -1,11 +1,11 @@
-# import os
+import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 
 from app import create_app
 from models import setup_db, Book, Degree
-from config import DB_PATH, JWT
+from config import JWT
 
 active_auth={"Authorization": "Bearer {}".format(JWT)}
 
@@ -49,7 +49,7 @@ class BookTestCase(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.db_name = "life_data_test"
-        self.db_full_path = DB_PATH + self.db_name
+        self.db_full_path = os.environ.get('DATABASE_URL_TEST')
         setup_db(self.app, self.db_full_path)
         
     

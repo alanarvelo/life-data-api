@@ -1,6 +1,7 @@
 #----------------------------------------------------------------------------#
 # Imports
 #----------------------------------------------------------------------------#
+import os
 from flask import (
     Flask,
     request,
@@ -9,7 +10,6 @@ from flask import (
 )
 from models import setup_db, Book, Degree
 from flask_cors import CORS
-from config import DB_PATH, DB_NAME
 
 from auth import AuthError, requires_auth
 
@@ -356,4 +356,4 @@ def create_app(test_config=None):
     return app
 
 app = create_app()
-setup_db(app, DB_PATH + DB_NAME)
+setup_db(app, os.environ.get('DATABASE_URL'))
