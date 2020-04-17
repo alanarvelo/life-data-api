@@ -11,6 +11,8 @@ from models import setup_db, Book, Degree
 from flask_cors import CORS
 from config import DB_PATH, DB_NAME
 
+from auth import AuthError, requires_auth
+
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -80,8 +82,8 @@ def create_app(test_config=None):
             or appropriate status code indicating reason for failure
     '''
     @app.route("/books", methods=["POST"])
-    # @requires_auth("post:books")
-    def create_book(): #payload
+    @requires_auth("post:books")
+    def create_book(payload):
         try:
             body = request.get_json()
             new_book = Book(
@@ -111,8 +113,8 @@ def create_app(test_config=None):
             or appropriate status code indicating reason for failure
     '''
     @app.route("/books/<int:id>", methods=["PATCH"])
-    # @requires_auth("patch:books")
-    def update_book(id): #payload,
+    @requires_auth("patch:books")
+    def update_book(payload, id):
         try:
             book = Book.query.get(id)
             data = request.get_json()
@@ -143,8 +145,8 @@ def create_app(test_config=None):
             or appropriate status code indicating reason for failure
     '''
     @app.route("/books/<int:id>", methods=["DELETE"])
-    # @requires_auth("patch:books")
-    def delete_book(id): #payload,
+    @requires_auth("delete:books")
+    def delete_book(payload, id):
         try:
             book = Book.query.get(id)
             book.delete()
@@ -209,8 +211,8 @@ def create_app(test_config=None):
             or appropriate status code indicating reason for failure
     '''
     @app.route("/degrees", methods=["POST"])
-    # @requires_auth("post:degrees")
-    def create_degree(): #payload
+    @requires_auth("post:degrees")
+    def create_degree(payload):
         try:
             body = request.get_json()
             new_degree = Degree(
@@ -242,8 +244,8 @@ def create_app(test_config=None):
             or appropriate status code indicating reason for failure
     '''
     @app.route("/degrees/<int:id>", methods=["PATCH"])
-    # @requires_auth("patch:degrees")
-    def update_degree(id): #payload,
+    @requires_auth("patch:degrees")
+    def update_degree(payload, id):
         try:
             degree = Degree.query.get(id)
             data = request.get_json()
@@ -274,8 +276,8 @@ def create_app(test_config=None):
             or appropriate status code indicating reason for failure
     '''
     @app.route("/degrees/<int:id>", methods=["DELETE"])
-    # @requires_auth("patch:degrees")
-    def delete_degree(id): #payload,
+    @requires_auth("delete:degrees")
+    def delete_degree(payload, id):
         try:
             degree = Degree.query.get(id)
             degree.delete()
@@ -339,17 +341,17 @@ def create_app(test_config=None):
             "message": "unprocessable entity"
         }), 422
 
-    
+
     '''
-        401 unathorized
+        Authentication Error
     '''
-    @app.errorhandler(401)
-    def unprocessable(error):
+    @app.errorhandler(AuthError)
+    def handle_bad_request(e):
         return jsonify({
-            "success": False, 
-            "error": 401,
-            "message": "unathorized"
-        }), 401
+                    "success": False, 
+                    "error": e.error['code'],
+                    "message": e.error['description'],
+                    }), e.status_code
     
     return app
 
