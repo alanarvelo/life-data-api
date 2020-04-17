@@ -8,7 +8,8 @@ from flask import (
     jsonify,
     abort,
     redirect,
-    url_for
+    url_for,
+    render_template
 )
 from models import setup_db, Book, Degree
 from flask_cors import CORS
@@ -35,21 +36,31 @@ def create_app(test_config=None):
 
 
     ###########################  ROUTES  ############################
+    ## Static
 
     @app.route('/')
     def index():
-        return redirect(url_for('retrieve_books'))
+        return render_template('index.html')
+    
+    @app.route('/degrees')
+    def degrees():
+        return render_template('index.html')
+    
+    @app.route('/projects')
+    def projects():
+        return render_template('index.html')
+
 
     #############  BOOKS  ##############
 
     '''
-        GET /books
+        GET /data/books
             public endpoint
         returns status code 200 and json {"success": True, "total_books": total_books,
         "books": books } where books is a list of book objects,
             or appropriate status code indicating reason for failure
     '''
-    @app.route("/books", methods=["GET"])
+    @app.route("/data/books", methods=["GET"])
     def retrieve_books():
         books = Book.query.order_by(Book.date_read).all()
         books = [book.long() for book in books]
@@ -61,13 +72,13 @@ def create_app(test_config=None):
 
 
     '''
-        GET /books/id
+        GET /data/books/id
             public endpoint
         returns status code 200 and json {"success": True, "books": book } where 
         books is an array containing only the matched book object,
             or appropriate status code indicating reason for failure
     '''
-    @app.route("/books/<int:id>", methods=["GET"])
+    @app.route("/data/books/<int:id>", methods=["GET"])
     def retrieve_book(id):
         book = Book.query.get(id)
         if book:
@@ -81,13 +92,13 @@ def create_app(test_config=None):
 
         
     '''
-        POST /books
+        POST /data/books
             requires the 'post:books' permission
         returns status code 200 and json {"success": True, "books": book} where 
         book is an array containing only the newly created book,
             or appropriate status code indicating reason for failure
     '''
-    @app.route("/books", methods=["POST"])
+    @app.route("/data/books", methods=["POST"])
     @requires_auth("post:books")
     def create_book(payload):
         try:
@@ -111,14 +122,14 @@ def create_app(test_config=None):
 
 
     '''
-        PATCH /books/id
+        PATCH /data/books/id
             responds with a 404 error if id is not found
             requires the 'patch:books' permission
         returns status code 200 and json {"success": True, "books": book} where 
         book is an array containing only the updated book,
             or appropriate status code indicating reason for failure
     '''
-    @app.route("/books/<int:id>", methods=["PATCH"])
+    @app.route("/data/books/<int:id>", methods=["PATCH"])
     @requires_auth("patch:books")
     def update_book(payload, id):
         try:
@@ -143,14 +154,14 @@ def create_app(test_config=None):
 
 
     '''
-        DELETE /books/id
+        DELETE /data/books/id
             responds with a 404 error if id is not found
             requires the 'delete:books' permission
         returns status code 200 and json {"success": True, "id_deleted": id} where 
         id is the id of the deleted book record,
             or appropriate status code indicating reason for failure
     '''
-    @app.route("/books/<int:id>", methods=["DELETE"])
+    @app.route("/data/books/<int:id>", methods=["DELETE"])
     @requires_auth("delete:books")
     def delete_book(payload, id):
         try:
@@ -169,13 +180,13 @@ def create_app(test_config=None):
     #############  DEGREES  ##############
 
     '''
-        GET /degrees
+        GET /data/degrees
             public endpoint
         returns status code 200 and json {"success": True, "total_degrees": total_degrees,
         "degrees": degrees } where degrees is a list of degree objects,
             or appropriate status code indicating reason for failure
     '''
-    @app.route("/degrees", methods=["GET"])
+    @app.route("/data/degrees", methods=["GET"])
     def retrieve_degrees():
         try:
             degrees = Degree.query.order_by(Degree.year_completed).all()
@@ -190,13 +201,13 @@ def create_app(test_config=None):
 
 
     '''
-        GET /degrees/id
+        GET /data/degrees/id
             public endpoint
         returns status code 200 and json {"success": True, "degrees": degree } where 
         degrees is an array containing only the matched degree object,
             or appropriate status code indicating reason for failure
     '''
-    @app.route("/degrees/<int:id>", methods=["GET"])
+    @app.route("/data/degrees/<int:id>", methods=["GET"])
     def retrieve_degree(id):
         degree = Degree.query.get(id)
         if degree:
@@ -210,13 +221,13 @@ def create_app(test_config=None):
 
         
     '''
-        POST /degrees
+        POST /data/degrees
             requires the 'post:degrees' permission
         returns status code 200 and json {"success": True, "degrees": degree} where 
         degree is an array containing only the newly created degree,
             or appropriate status code indicating reason for failure
     '''
-    @app.route("/degrees", methods=["POST"])
+    @app.route("/data/degrees", methods=["POST"])
     @requires_auth("post:degrees")
     def create_degree(payload):
         try:
@@ -242,14 +253,14 @@ def create_app(test_config=None):
 
 
     '''
-        PATCH /degrees/id
+        PATCH /data/degrees/id
             responds with a 404 error if id is not found
             requires the 'patch:degrees' permission
         returns status code 200 and json {"success": True, "degrees": degree} where 
         degree is an array containing only the updated degree,
             or appropriate status code indicating reason for failure
     '''
-    @app.route("/degrees/<int:id>", methods=["PATCH"])
+    @app.route("/data/degrees/<int:id>", methods=["PATCH"])
     @requires_auth("patch:degrees")
     def update_degree(payload, id):
         try:
@@ -274,14 +285,14 @@ def create_app(test_config=None):
 
 
     '''
-        DELETE /degrees/id
+        DELETE /data/degrees/id
             responds with a 404 error if id is not found
             requires the 'delete:degrees' permission
         returns status code 200 and json {"success": True, "id_deleted": id} where 
         id is the id of the deleted degree record,
             or appropriate status code indicating reason for failure
     '''
-    @app.route("/degrees/<int:id>", methods=["DELETE"])
+    @app.route("/data/degrees/<int:id>", methods=["DELETE"])
     @requires_auth("delete:degrees")
     def delete_degree(payload, id):
         try:

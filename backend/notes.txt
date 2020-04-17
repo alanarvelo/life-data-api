@@ -1,0 +1,18 @@
+
+## TODOS
+- Schedule a DB backup from Heroku's postgres to AWS S3 every few months
+- Host the remaining diplomas on AWS S3 and point to them from Degrees Table and Personal website
+- Add a squential number to the Book model    ---- DONE
+- Create a Phrases/Frases model to hold CAN and other memorable quotes.
+
+## COMMANDS
+# create testdb as duplicate of proddb
+createdb -T life_data life_data_test -U postgres
+
+## NOTES
+Auth0 Authorize Link
+https://dev-coffee-auth.auth0.com/authorize?audience=life-data-api&response_type=token&client_id=6qJQWJkHNv0Jq19BAKueIWeOF3d8X3BY&redirect_uri=https://www.alanarvelo.com/data
+
+alan's (manager) auht0 password dnZ553wrt%5htHM
+alan's JWT 
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjRxbEhwN2M4aWY1TjdFUVB1b3FZMSJ9.eyJpc3MiOiJodHRwczovL2Rldi1jb2ZmZWUtYXV0aC5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWU4ZmJjZjVmODUxZjMwYzE2NTcwZjBkIiwiYXVkIjoibGlmZS1kYXRhLWFwaSIsImlhdCI6MTU4NzE2MTE0OCwiZXhwIjoxNTg3MTY4MzQ4LCJhenAiOiI2cUpRV0prSE52MEpxMTlCQUt1ZUlXZU9GM2Q4WDNCWSIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOmJvb2tzIiwiZGVsZXRlOmRlZ3JlZXMiLCJwYXRjaDpib29rcyIsInBhdGNoOmRlZ3JlZXMiLCJwb3N0OmJvb2tzIiwicG9zdDpkZWdyZWVzIl19.xKtXsvHyjmhqQFxs1076TK7hbyGDEU14_QTnC6KIOwsQ1bOMMNwU2M_h1pUrIL8pS-u49gC0jQFvXGc9Ybsz2S7J9zpWd9MxoPHvGXpTkXKr4VcaThHXt2jlFUlgJoDRICly7hS_HNUrbcdhd2BdGp-KuB8Y3P99nzXMKzQ-rMKOaiEOK27vd-DEbH8T8TfrNgkSZjeBoO_g2rc9rxoggERIdQq9EfhfKjCPnXiOs64-dEn_RyFCMey_oBP8sSPNfgrM7YPYgkA6RYzWiMfq4Hfs87da8XjafHi1dumng45-PqVnNlywXJDvOeWg6ivkjdBUcs2GoEpcv-ORDTc9XA

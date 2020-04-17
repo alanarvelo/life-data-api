@@ -64,9 +64,9 @@ class BookTestCase(unittest.TestCase):
     ###################    BOOKS    ###################
     ## Regular behavior
 
-    # @app.route("/books", methods=["POST"]) with JWT token
+    # @app.route("/data/books", methods=["POST"]) with JWT token
     def test_create_book1(self):
-        res = self.client().post('/books', json=self.book1, headers=active_auth)
+        res = self.client().post('/data/books', json=self.book1, headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -74,47 +74,47 @@ class BookTestCase(unittest.TestCase):
 
 
     def test_create_book2(self):
-        res = self.client().post('/books', json=self.book2, headers=active_auth)
+        res = self.client().post('/data/books', json=self.book2, headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['books'])
 
 
-    # @app.route("/books/<int:id>", methods=["GET"])
+    # @app.route("/data/books/<int:id>", methods=["GET"])
     def test_get_book(self):
         self.test_create_book1()
-        res = self.client().get('/books/1')
+        res = self.client().get('/data/books/1')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['books'])
 
 
-    # @app.route("/books", methods=["GET"])
+    # @app.route("/data/books", methods=["GET"])
     def test_get_books(self):
         self.test_create_book1()
         self.test_create_book2()
-        res = self.client().get('/books')
+        res = self.client().get('/data/books')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(len(data['books']), 2)
 
     
-    # @app.route("/books/<int:id>", methods=["PATCH"])
+    # @app.route("/data/books/<int:id>", methods=["PATCH"])
     def test_patch_book(self):
         self.test_create_book1()
-        res = self.client().patch('/books/1', json={"year_published": "1800"}, headers=active_auth)
+        res = self.client().patch('/data/books/1', json={"year_published": "1800"}, headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['books'][0]['year_published'], "1800")
 
-    # @app.route("/books/<int:id>", methods=["DELETE"])
+    # @app.route("/data/books/<int:id>", methods=["DELETE"])
     def test_delete_book(self):
         self.test_create_book1()
-        res = self.client().delete('/books/1', headers=active_auth)
+        res = self.client().delete('/data/books/1', headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -124,56 +124,56 @@ class BookTestCase(unittest.TestCase):
     ###################    BOOKS    ###################
     ## Error behavior
 
-    # @app.route("/books", methods=["POST"]) with JWT token but malformed book
+    # @app.route("/data/books", methods=["POST"]) with JWT token but malformed book
     def test_422_on_create_book(self):
         new_book = self.book1.copy()
         del new_book['title']
-        res = self.client().post('/books', json=new_book, headers=active_auth)
+        res = self.client().post('/data/books', json=new_book, headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
 
 
-    # @app.route("/books/<int:id>", methods=["GET"])
+    # @app.route("/data/books/<int:id>", methods=["GET"])
     def test_404_on_get_book(self):
         self.test_create_book1()
-        res = self.client().get('/books/1000')
+        res = self.client().get('/data/books/1000')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
 
 
-    # @app.route("/books", methods=["GET"])
+    # @app.route("/data/books", methods=["GET"])
     def test_404_on_get_books(self):
-        res = self.client().get('/booksS')
+        res = self.client().get('/data/booksS')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
     
 
-    # @app.route("/books", methods=["GET"])
+    # @app.route("/data/books", methods=["GET"])
     def test_405_on_get_books(self):
-        res = self.client().patch('/books')
+        res = self.client().patch('/data/books')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 405)
         self.assertEqual(data['success'], False)
 
     
-    # @app.route("/books/<int:id>", methods=["PATCH"])
+    # @app.route("/data/books/<int:id>", methods=["PATCH"])
     def test_422_on_patch_book(self):
         self.test_create_book1()
-        res = self.client().patch('/books/1', json={"most_wanted": "2010"}, headers=active_auth)
+        res = self.client().patch('/data/books/1', json={"most_wanted": "2010"}, headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
 
 
-    # @app.route("/books", methods=["GET"])
+    # @app.route("/data/books", methods=["GET"])
     def test_404_on_delete_book(self):
         res = self.client().delete('/book/1000')
         data = json.loads(res.data)
@@ -184,29 +184,29 @@ class BookTestCase(unittest.TestCase):
 
     ## Not Authorized behavior
 
-    # @app.route("/books", methods=["POST"]) without JWT token
+    # @app.route("/data/books", methods=["POST"]) without JWT token
     def test_not_auth_on_create_book1(self):
-        res = self.client().post('/books', json=self.book1)
+        res = self.client().post('/data/books', json=self.book1)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['success'], False)
     
 
-    # @app.route("/books/<int:id>", methods=["PATCH"])
+    # @app.route("/data/books/<int:id>", methods=["PATCH"])
     def test_not_auth_on_patch_book(self):
         self.test_create_book1()
-        res = self.client().patch('/books/1', json={"most_wanted": "2010"})
+        res = self.client().patch('/data/books/1', json={"most_wanted": "2010"})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['success'], False)
 
     
-    # @app.route("/books/<int:id>", methods=["DELETE"])
+    # @app.route("/data/books/<int:id>", methods=["DELETE"])
     def test_not_auth_on_delete_book(self):
         self.test_create_book1()
-        res = self.client().delete('/books/1')
+        res = self.client().delete('/data/books/1')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -217,9 +217,9 @@ class BookTestCase(unittest.TestCase):
     ###################    DEGREE    ###################
     ## Regular behavior
 
-    # @app.route("/degrees", methods=["POST"]) with JWT token
+    # @app.route("/data/data/degrees", methods=["POST"]) with JWT token
     def test_create_degree1(self):
-        res = self.client().post('/degrees', json=self.degree1, headers=active_auth)
+        res = self.client().post('/data/degrees', json=self.degree1, headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -227,47 +227,47 @@ class BookTestCase(unittest.TestCase):
 
 
     def test_create_degree2(self):
-        res = self.client().post('/degrees', json=self.degree2, headers=active_auth)
+        res = self.client().post('/data/degrees', json=self.degree2, headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['degrees'])
 
 
-    # @app.route("/degrees/<int:id>", methods=["GET"])
+    # @app.route("/data/degrees/<int:id>", methods=["GET"])
     def test_get_degree(self):
         self.test_create_degree1()
-        res = self.client().get('/degrees/1')
+        res = self.client().get('/data/degrees/1')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data['degrees'])
 
 
-    # @app.route("/degrees", methods=["GET"])
+    # @app.route("/data/degrees", methods=["GET"])
     def test_get_degrees(self):
         self.test_create_degree1()
         self.test_create_degree2()
-        res = self.client().get('/degrees')
+        res = self.client().get('/data/degrees')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(len(data['degrees']), 2)
 
     
-    # @app.route("/degrees/<int:id>", methods=["PATCH"])
+    # @app.route("/data/degrees/<int:id>", methods=["PATCH"])
     def test_patch_degree(self):
         self.test_create_degree1()
-        res = self.client().patch('/degrees/1', json={"year_completed": "2000"}, headers=active_auth)
+        res = self.client().patch('/data/degrees/1', json={"year_completed": "2000"}, headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['degrees'][0]['year_completed'], "2000")
 
-    # @app.route("/degrees/<int:id>", methods=["DELETE"])
+    # @app.route("/data/degrees/<int:id>", methods=["DELETE"])
     def test_delete_degree(self):
         self.test_create_degree1()
-        res = self.client().delete('/degrees/1', headers=active_auth)
+        res = self.client().delete('/data/degrees/1', headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -277,56 +277,56 @@ class BookTestCase(unittest.TestCase):
     ###################    DEGREES    ###################
     ## Error behavior
 
-    # @app.route("/degrees", methods=["POST"]) with JWT token but malformed degree
+    # @app.route("/data/degrees", methods=["POST"]) with JWT token but malformed degree
     def test_422_on_create_degree(self):
         new_degree = self.degree1.copy()
         del new_degree['title']
-        res = self.client().post('/degrees', json=new_degree, headers=active_auth)
+        res = self.client().post('/data/degrees', json=new_degree, headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
 
 
-    # @app.route("/degrees/<int:id>", methods=["GET"])
+    # @app.route("/data/degrees/<int:id>", methods=["GET"])
     def test_404_on_get_degree(self):
         self.test_create_degree1()
-        res = self.client().get('/degrees/1000')
+        res = self.client().get('/data/degrees/1000')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
 
 
-    # @app.route("/degrees", methods=["GET"])
+    # @app.route("/data/degrees", methods=["GET"])
     def test_404_on_get_degrees(self):
-        res = self.client().get('/degreesS')
+        res = self.client().get('/data/degreesS')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
     
 
-    # @app.route("/degrees", methods=["GET"])
+    # @app.route("/data/degrees", methods=["GET"])
     def test_405_on_get_degrees(self):
-        res = self.client().patch('/degrees')
+        res = self.client().patch('/data/degrees')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 405)
         self.assertEqual(data['success'], False)
 
     
-    # @app.route("/degrees/<int:id>", methods=["PATCH"])
+    # @app.route("/data/degrees/<int:id>", methods=["PATCH"])
     def test_422_on_patch_degree(self):
         self.test_create_degree1()
-        res = self.client().patch('/degrees/1', json={"most_wanted": "2010"}, headers=active_auth)
+        res = self.client().patch('/data/degrees/1', json={"most_wanted": "2010"}, headers=active_auth)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
 
 
-    # @app.route("/degrees", methods=["GET"])
+    # @app.route("/data/degrees", methods=["GET"])
     def test_404_on_delete_degree(self):
         res = self.client().delete('/degree/1000')
         data = json.loads(res.data)
@@ -337,29 +337,29 @@ class BookTestCase(unittest.TestCase):
 
     ## Not Authorized behavior
 
-    # @app.route("/degrees", methods=["POST"]) without JWT token
+    # @app.route("/data/degrees", methods=["POST"]) without JWT token
     def test_not_auth_on_create_degree1(self):
-        res = self.client().post('/degrees', json=self.degree1)
+        res = self.client().post('/data/degrees', json=self.degree1)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['success'], False)
     
 
-    # @app.route("/degrees/<int:id>", methods=["PATCH"])
+    # @app.route("/data/degrees/<int:id>", methods=["PATCH"])
     def test_not_auth_on_patch_degree(self):
         self.test_create_degree1()
-        res = self.client().patch('/degrees/1', json={"most_wanted": "2010"})
+        res = self.client().patch('/data/degrees/1', json={"most_wanted": "2010"})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['success'], False)
 
     
-    # @app.route("/degrees/<int:id>", methods=["DELETE"])
+    # @app.route("/data/degrees/<int:id>", methods=["DELETE"])
     def test_not_auth_on_delete_degree(self):
         self.test_create_degree1()
-        res = self.client().delete('/degrees/1')
+        res = self.client().delete('/data/degrees/1')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
