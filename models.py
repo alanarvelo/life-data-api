@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer, DATE
 from datetime import datetime
-import config
 
 
 db = SQLAlchemy()
@@ -10,11 +9,14 @@ db = SQLAlchemy()
 setup_db(app)
     binds a flask application and a SQLAlchemy service
 '''
-def setup_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = config.SQLALCHEMY_TRACK_MODIFICATIONS
+def setup_db(app, db_full_path):
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_full_path
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
+    if 'test' in db_full_path:
+        db.drop_all()
+        db.create_all()
 
 #----------------------------------------------------------------------------#
 # Models.
@@ -61,14 +63,12 @@ class Book(db.Model):
         long form representation of the Book model
     '''
     def long(self):
-        print(type(self.date_read))
-        print(self.date_read.strftime('%b %Y'))
         return {
             'id': self.id,
             'isbn': self.isbn,
             'title': self.title,
             'author': self.author,
-            'year_published': int(self.year_published),
+            'year_published': self.year_published,
             'date_read': self.date_read.strftime('%b %Y'),
         }
 
@@ -122,7 +122,7 @@ class Degree(db.Model):
             'institution': self.institution,
             'title': self.title,
             'category': self.category,
-            'year_completed': int(self.year_completed),
+            'year_completed': self.year_completed,
             'location': self.location,
             'url': self.url
         }
