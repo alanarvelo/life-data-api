@@ -22,7 +22,7 @@ from auth import AuthError, requires_auth
 
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder="../frontend/templates", static_folder='../frontend/resources')
     CORS(app)
 
     '''
@@ -44,14 +44,18 @@ def create_app(test_config=None):
     
     @app.route('/degrees')
     def degrees():
-        return render_template('index.html')
+        return render_template('degrees.html')
     
     @app.route('/projects')
     def projects():
-        return render_template('index.html')
+        return render_template('projects.html')
 
 
     #############  BOOKS  ##############
+
+    @app.route('/data')
+    def data_index():
+        return redirect(url_for('retrieve_books'))
 
     '''
         GET /data/books
