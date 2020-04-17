@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 from sqlalchemy import create_engine
 
 degrees = pd.read_csv('/Users/alanarvelo/Downloads/degree_log.csv')
@@ -7,7 +8,8 @@ degrees.info()
 degrees.drop('Unnamed: 0', axis=1, inplace=True)
 degrees.info()
 
-eng = create_engine('postgresql://postgres:1234@localhost:5432/life_data')
+db_url = os.environ.get('DATABASE_URL_HEROKU')
+eng = create_engine(db_url)
 degrees.to_sql('degrees', con=eng, if_exists='append', index=False)
 print("Imported Degrees")
 

@@ -6,7 +6,9 @@ from flask import (
     Flask,
     request,
     jsonify,
-    abort
+    abort,
+    redirect,
+    url_for
 )
 from models import setup_db, Book, Degree
 from flask_cors import CORS
@@ -33,6 +35,10 @@ def create_app(test_config=None):
 
 
     ###########################  ROUTES  ############################
+
+    @app.route('/')
+    def index():
+        return redirect(url_for('retrieve_books'))
 
     #############  BOOKS  ##############
 
