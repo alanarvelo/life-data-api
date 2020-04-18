@@ -4,4 +4,4 @@
 A constant work-in-progress display of my work, my life.
 
 
-Check `backendREADME.md` for technical details.
+Check `backend/README.md` for technical details.
