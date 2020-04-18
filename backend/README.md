@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ##### Database Setup
 To test locally you must create a sql database, I use postgres, and add the `DATABASE_URL` as an environment variable. This will be used in `app.py` via os.environ.get() to connect yo your local db.
 
-Then you can run the database migration by:
+Then, from within the `backend/` directory, you can run the database migration by:
 ```bash
 python manage.py db upgrade
 ```
@@ -35,7 +35,7 @@ python import_data.py
 
 ##### Running the server
 
-From within the `backend/` directory first ensure you are working using your created virtual environment.
+From within the `backend/` directory, first ensure you are working using your created virtual environment.
 
 To run the server, execute:
 ```bash
