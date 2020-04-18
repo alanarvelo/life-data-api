@@ -4,6 +4,7 @@
 - Host the remaining diplomas on AWS S3 and point to them from Degrees Table and Personal website
 - Add a squential number to the Book model    ---- DONE
 - Create a Phrases/Frases model to hold CAN and other memorable quotes.
+- Add pagination to books. Return only 10 books (pages) or returns only books per year (default ot current).
 
 ## COMMANDS
 # create testdb as duplicate of proddb

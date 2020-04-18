@@ -2,20 +2,20 @@ import pandas as pd
 import os
 from sqlalchemy import create_engine
 
-degrees = pd.read_csv('/Users/alanarvelo/Downloads/degree_log.csv')
+degrees = pd.read_csv('seed_data/degree_log.csv')
 degrees.info()
 
 degrees.drop('Unnamed: 0', axis=1, inplace=True)
 degrees.info()
 
-db_url = os.environ.get('DATABASE_URL_HEROKU')
+db_url = os.environ.get('DATABASE_URL')
 eng = create_engine(db_url)
 degrees.to_sql('degrees', con=eng, if_exists='append', index=False)
 print("Imported Degrees")
 
 
 
-books = pd.read_csv('/Users/alanarvelo/Downloads/reading_log.csv')
+books = pd.read_csv('seed_data/reading_log.csv')
 books.info()
 
 books.drop('Unnamed: 0', axis=1, inplace=True)
