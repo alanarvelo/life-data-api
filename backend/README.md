@@ -61,7 +61,13 @@ There are 2 roles:
 + **book_reader** has permissions `post:books`, `patch:books`, and `delete:books`.
 + **degrees_reader** has permissions `degrees:books`, `degrees:books`, and `degrees:books`.
 
-If you want these roles assigned to your user, shoot me an email. If you should have access to this endpoints, an active JWT token would have been shared with you in a secure manner.
+
+The url to authorize yourself is:
+```
+https://dev-coffee-auth.auth0.com/authorize?audience=life-data-api&response_type=token&client_id=6qJQWJkHNv0Jq19BAKueIWeOF3d8X3BY&redirect_uri=https://www.alanarvelo.com/data
+```
+
+However, you would need the roles above assigned to your user to perform `post`, `patch`, `delete`, actions. Shoot me an email to sort this out. If you should have access to this endpoints, an active JWT token would have been shared with you via a secure manner.
 
 ## API Reference
 
