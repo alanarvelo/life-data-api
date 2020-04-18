@@ -10,7 +10,7 @@ This application is currently hosted at `www.alanarvelo.com/data`
 
 ### Installing Dependencies
 
-**Python 3.7** is required. A virtual environment is encouraged. Dependencies can be installed by running the below command form the `/backend` directory:
+**Python 3.7** is required. A virtual environment is encouraged. Dependencies can be installed by running the below command form the root directory:
 
 ```bash
 pip install -r requirements.txt
