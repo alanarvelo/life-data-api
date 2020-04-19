@@ -1,7 +1,4 @@
-# Personal website backend 
-
-### Motivation
-This backend was built from scratch as Udacity's Full Stack Developer Nanodegree capstone project. Before this, my personal site had no backend, it was just html files.
+# Personal website backend
 
 ### URL
 This application is currently hosted at `www.alanarvelo.com/data`
@@ -28,10 +25,11 @@ Then, from within the `backend/` directory, you can run the database migration b
 ```bash
 python manage.py db upgrade
 ```
-and import the data via:
+To fill your local database, create some dummy data and run:
 ```bash
 python import_data.py
 ```
+
 
 ##### Running the server
 
@@ -49,25 +47,11 @@ Setting the `FLASK_APP` variable to `app.py` directs flask to this file to find 
 ### Roles & Permissions
 The API handles 2 collections `books` and `degrees`, each supports CRUD methods as to be seen below in *API Reference*. Read operations are of public access by sending `GET` requests to their respective endpoints. Create, update, and delete operations require authentication.
 
-Authentication is handled by Auth0, the configuration detials are:
-```bash
-AUTH0_DOMAIN='dev-coffee-auth.auth0.com'
-ALGORITHMS=['RS256']
-API_AUDIENCE='life-data-api'
-CLIENT_ID=6qJQWJkHNv0Jq19BAKueIWeOF3d8X3BY
-```
-
 There are 2 roles:
 + **book_reader** has permissions `post:books`, `patch:books`, and `delete:books`.
 + **degrees_reader** has permissions `degrees:books`, `degrees:books`, and `degrees:books`.
 
-
-The url to authorize yourself is:
-```
-https://dev-coffee-auth.auth0.com/authorize?audience=life-data-api&response_type=token&client_id=6qJQWJkHNv0Jq19BAKueIWeOF3d8X3BY&redirect_uri=https://www.alanarvelo.com/data
-```
-
-However, you would need the roles above assigned to your user to perform `post`, `patch`, `delete`, actions. Shoot me an email to sort this out. If you should have access to this endpoints, an active JWT token would have been shared with you via a secure manner.
+The roles above are required to perform `post`, `patch`, `delete`, actions. Shoot me an email if you want access.
 
 ## API Reference
 
