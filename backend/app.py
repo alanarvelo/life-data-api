@@ -25,6 +25,14 @@ def create_app(test_config=None):
     app = Flask(__name__, template_folder="../frontend/templates", static_folder='../frontend/resources')
     CORS(app)
 
+    # HAVE NOT TESTED YET
+    @app.before_request
+    def clear_trailing():
+        rp = request.path 
+        if rp != '/' and rp.endswith('/'):
+            return redirect(rp[:-1])
+
+
     '''
     Using the after_request decorator to set Access-Control-Allow
     '''
