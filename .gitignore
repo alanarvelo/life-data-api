@@ -4,3 +4,5 @@
 **/.vscode/
 **/private.txt
 **/.DS_Store
+backend/seed_data
+.python-version

@@ -3,7 +3,6 @@ import os
 from sqlalchemy import create_engine
 
 degrees = pd.read_csv('seed_data/degree_log.csv')
-degrees.info()
 
 degrees.drop('Unnamed: 0', axis=1, inplace=True)
 degrees.info()
@@ -12,6 +11,7 @@ db_url = os.environ.get('DATABASE_URL')
 eng = create_engine(db_url)
 degrees.to_sql('degrees', con=eng, if_exists='append', index=False)
 print("Imported Degrees")
+print(degrees)
 
 
 
@@ -38,3 +38,4 @@ books.info()
 
 books.to_sql('books', con=eng, if_exists='append', index=False)
 print("Imported Books")
+print(books.head())
